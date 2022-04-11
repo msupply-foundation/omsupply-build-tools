@@ -6,8 +6,8 @@ Repository for build tools of omSupply project, [back end](https://github.com/op
 
 Two images have been added to [dockerhub msupplyfoundation](https://hub.docker.com/u/msupplyfoundation)
 
-* omsupply(todo) -> empty image with no data and initilised schema
-* omsupply_withdata(todo) -> image with data initilised, derived from omsupply image
+* [omsupply](https://hub.docker.com/repository/docker/msupplyfoundation/omsupply) -> empty image with no data and initilised schema
+* [omsupply_withdata](https://hub.docker.com/repository/docker/msupplyfoundation/omsupply_withdata) -> image with data initilised, derived from omsupply image
 
 Images include both postgres and sqlite binaries, export tool and auto data refresh (advance dates forward). 
 
@@ -21,7 +21,7 @@ Starting image is best done via command line, but can also be started with docke
 
 `NOTE` make sure docker daemon is running (start docker desktop)
 
-These are the easies images to get going, find the version you want here(todo) and then type the following in terminal:
+These are the easies images to get going, find the version you want [here](https://hub.docker.com/repository/docker/msupplyfoundation/omsupply_withdata) and then type the following in terminal:
 
 ```bash
 docker run -ti -p 3000:3000 msupplyfoundation/omsupply_withdata:{tagname}
@@ -41,7 +41,7 @@ When container starts running, you can press enter and run terminal commands ins
 
 You can now go to `http://localhost:3000` in your browser to access omSupply. `-p` means bind host port 3000 (port on your computer) to docker port 3000 (where app is running inside the container).
 
-Every image with data that's pushed to dockerhub should have associated description here(todo), you can find original data find reference and usernames and passwords there
+Every image with data that's pushed to dockerhub should have associated description [here](https://github.com/openmsupply/omsupply-build-tools/tree/main/builds), you can find original data find reference and usernames and passwords there
 
 ## Restarting image with data
 
@@ -57,7 +57,7 @@ Data should have persisted
 
 ## Starting image without data
 
-These are empty images that need to be initilised, thy can be found here(todo)
+These are empty images that need to be initilised, they can be found [here]([omsupply](https://hub.docker.com/repository/docker/msupplyfoundation/omsupply)
 
 You would need to pass through sync site credentials via env variables
 
@@ -91,7 +91,7 @@ Every time a container is started from image:
 
 ## Docker fo Devs
 
-Two Dockerfiles are used to create base image and image with data, base image for publishing should be created by specifying git `tags` and temporary dev images can be created from any `branch`. `dockerise.sh` provides an easy way to create both base and data images, just change env variables in that file. `dockerise_data_only.sh` can be used to build just the data image from already created base image. With data images should be accompanied by a description(todo).
+Two Dockerfiles are used to create base image and image with data, base image for publishing should be created by specifying git `tags` and temporary dev images can be created from any `branch`. `dockerise.sh` provides an easy way to create both base and data images, just change env variables in that file. `dockerise_data_only.sh` can be used to build just the data image from already created base image. With data images should be accompanied by a [description](https://github.com/openmsupply/omsupply-build-tools/tree/main/builds).
 
 ## docker/build_empty/Dockerfile
 
