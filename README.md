@@ -13,9 +13,9 @@ Images include both postgres and sqlite binaries, export tool and auto data refr
 
 # Docker for Consumers
 
-See dockerhub for available tag/s or version, most of the time `latest` tag should be used. Once you've [installed docker](https://docs.docker.com/desktop/mac/install/), and picked the flavour you can run image locally. Images run inside `containers`, containers can be stopped and resumed with data persisting, you can also persist data between different images by mounting volumes (at the time of writting migrations are not implemented on back end so instructions for this is not provided)
+See dockerhub for available tag/s or version, most of the time `latest` tag should be used. Once you've [installed docker](https://docs.docker.com/desktop/mac/install/), and picked the tag you can run image locally. Images run inside `containers`, containers can be stopped and resumed with data persisting, you can also persist data between different images by mounting volumes (at the time of writting migrations are not implemented on back end so instructions for this is not provided)
 
-Starting image is best done via command line, but can also be started with docker desktop (instructions are not included here, when starting image via docker desktop have to bind port 3000 to 3000).
+Starting image is best done via command line, but can also be started with docker desktop (instructions are not included here, when starting image via docker desktop make sure to bind port 3000 to 3000).
 
 ## Starting image with data
 
@@ -29,7 +29,7 @@ docker run -ti -p 3000:3000 msupplyfoundation/omsupply_withdata:{tagname}
 docker run -ti -p 3000:3000 msupplyfoundation/omsupply_withdata:latest
 ```
 
-If something is already running on that port (like another container), then you can change the first 3000 to another port or stop image via docker desktop.
+If something is already running on that port (like another container), then you can change the first 3000 to another port or stop the other container via docker desktop.
 
 `docker` will give this container a random name, you can specify a different name with `--name`
 
@@ -39,7 +39,7 @@ docker run -ti -p 3000:3000 --name my-contianer-name msupplyfoundation/omsupply_
 
 When container starts running, you can press enter and run terminal commands inside the container, type `exit` to stop container and release from terminal. `-ti` mean `interactive` (can enter things in terminal) and `tty` (can see terminal output).
 
-You can now go to `http://localhost:3000` in your browser to access omSupply. `-p` means bind host port 3000 (port on your computer) to docker port 3000 (where app is running inside the container).
+You can now go to `http://localhost:3000` in your browser to access omSupply. `-p 3000:3000` means bind host port 3000 (port on your computer, first 3000) to docker port 3000 (where app is running inside the container, second 3000).
 
 Every image with data that's pushed to dockerhub should have associated description [here](https://github.com/openmsupply/omsupply-build-tools/tree/main/builds), you can find original data find reference and usernames and passwords there
 
@@ -57,13 +57,15 @@ Data should have persisted
 
 ## Starting image without data
 
-These are empty images that need to be initilised, they can be found [here]([omsupply](https://hub.docker.com/repository/docker/msupplyfoundation/omsupply)
+These are empty images that need to be initilised, they can be found [here](https://hub.docker.com/repository/docker/msupplyfoundation/omsupply)
 
 You would need to pass through sync site credentials via env variables
 
 ```bash
-docker run -ti -p 3000:3000 -e APP_SYNC__URL="http://localhost:2048" -e APP_SYNC__USERNAME="demo_site" -e  APP_SYNC__PASSWORD="pass" -e APP_SYNC__SITE_ID=2 msupplyfoundation/omsupply:latest
+docker run -ti -p 3000:3000 -e APP_SYNC__URL="http://host.docker.internal:2048" -e APP_SYNC__USERNAME="demo_site" -e  APP_SYNC__PASSWORD="pass" -e APP_SYNC__SITE_ID=2 msupplyfoundation/omsupply:latest
 ```
+
+`NOTE` have to use `host.docker.internal` to access localhost from withing docker container, and if central server is not accessible (not running) on specified port, the operation may freeze (docker issue)
 
 ## Exporting Env
 
@@ -80,7 +82,7 @@ docker cp 4b7a36ef4f36:/home/env_export.zip .
 pwd
 ```
 
-Add issues to either back end](https://github.com/openmsupply/remote-server) or [front end](https://github.com/openmsupply/openmsupply-client) repositories with the bug, replication instructions and env export zip
+Add issues to either [back end](https://github.com/openmsupply/remote-server) or [front end](https://github.com/openmsupply/openmsupply-client) repositories with the bug, replication instructions and env export zip
 
 ## Extras
 
@@ -91,7 +93,7 @@ Every time a container is started from image:
 
 ## Docker fo Devs
 
-Two Dockerfiles are used to create base image and image with data, base image for publishing should be created by specifying git `tags` and temporary dev images can be created from any `branch`. `dockerise.sh` provides an easy way to create both base and data images, just change env variables in that file. `dockerise_data_only.sh` can be used to build just the data image from already created base image. With data images should be accompanied by a [description](https://github.com/openmsupply/omsupply-build-tools/tree/main/builds).
+Two Dockerfiles are used to create base image and image with data, base image for publishing should be created by specifying git `tags` (for `REMOTE_SERVER_BRANCH` and `OPENMSUPPLY_CLIENT_BRANCH`) and temporary dev images can be created from any `branch`. `dockerise.sh` provides an easy way to create both base and data images, just change env variables in that file. `dockerise_data_only.sh` can be used to build just the data image from already created base image. With data images should be accompanied by a [description](https://github.com/openmsupply/omsupply-build-tools/tree/main/builds).
 
 ## docker/build_empty/Dockerfile
 
@@ -105,7 +107,7 @@ Creates base image, using postgres image as base.
 * `remote_server_cli` is used to initilise schema for both pg and sqlite (openmsupply-databas.sqlite is placed inside `/home` dir)
 * `nginx` config is copied over, nginx serves static f/e files and proxies server to `/api` route
 * Build info is saved in `/home/build-info.txt` (branches and commits used in the build)
-* `entry.sh` runs first on container startup (it's meant to be harder to override the cmd.sh), it start postgres and nginx
+* `entry.sh` runs first on container startup (it's meant to be harder to override then cmd.sh), it start postgres and nginx
 * `cmd.sh` would run after `entry.sh` and can be easily overwritten i.e. `docker run -ti image_name /bin/bash` to enter into container terminal without starting server, or `docker run -ti image_name ./remote_server_postgres_cli refresh-data` to run just the refresh data`, cmd.sh does the following:
     * Starts either sqlite or postgres server (postgres by default, but can be overwritten with `-e DATABASE_TYPE=sqlite`)
     * Server is started with logs going to remote_server_{flavour}.log in `/home/` folder
@@ -133,7 +135,7 @@ For creating new data image from existing base image
 
 ## Git Action 
 
-Ideally we would have git actions that do dockarisations and push to dockerhub, this is not done yet. To populate images with data `remote_server_cli` allows for exporting and importing central data to json `initialise-from-export` and `export-initilisation sub commands.
+Ideally we would have git actions that do dockarisations and push to dockerhub, this is not done yet. ~~To populate images with data `remote_server_cli` allows for exporting and importing central data to json `initialise-from-export` and `export-initilisation sub commands~~ (this was removed in [this pr](https://github.com/openmsupply/remote-server/pull/1020) , but can be reinstated).
 
 
 ## Dockerhub

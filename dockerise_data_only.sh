@@ -11,7 +11,7 @@ SYNC_SITE_PASSWORD="pass"
 SYNC_SITE_ID="2"
 USERS="central admin:pass,hospital director:pass,rural pharm:pass" 
 
-FORCE_REBUILD_WITH_DATA='1'
+FORCE_REBUILD_WITH_DATA='0'
 
 TAG_AS_LATEST=true
 # Push to dockerhub
