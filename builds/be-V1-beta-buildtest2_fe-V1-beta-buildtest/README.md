@@ -5,7 +5,7 @@ https://github.com/openmsupply/openmsupply-client/releases/tag/V1-beta-buildtest
 ## remote-server branch
 https://github.com/openmsupply/remote-server/releases/tag/V1-beta-buildtest2
 ## data file
-Used [reference data file from jottacloud](Jottacloud::mSupply/ReferenceDataFile/Current (2020-07-09) master), with some modifications
+Used reference data file from jottacloud `Jottacloud::mSupply/ReferenceDataFile/Current (2020-07-09) master`, with some modifications
 * one site `demo` with password `pass` with all stores
 * all user passwords changed to `pass`
 * changed users name as per below
