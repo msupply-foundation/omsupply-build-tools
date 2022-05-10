@@ -4,9 +4,9 @@ set -e
 
 SHOULD_BUILD_BASE=true
 # Use tag instead of branch for published builds
-OPENMSUPPLY_CLIENT_BRANCH='main'
+OPENMSUPPLY_CLIENT_BRANCH='V1-beta-buildtest2'
 # Use tag instead of branch for published builds
-REMOTE_SERVER_BRANCH='develop'
+REMOTE_SERVER_BRANCH='V1-beta-buildtest3'
 # msupplyfoundation would be dockerhub account
 NEW_IMAGE_NAME='msupplyfoundation/omsupply'
 NEW_IMAGE_TAG="be-${REMOTE_SERVER_BRANCH}_fe-${OPENMSUPPLY_CLIENT_BRANCH}"
@@ -31,7 +31,7 @@ USERS="Demo:pass,Demo2:pass,Kopu:pass,Waikato:pass"
 # Also create latest tag, i.e. omsupply:latest and omsupply_withdata:latest
 TAG_AS_LATEST=true
 # Push to dockerhub
-PUSH_TO_DOCKERHUB=false
+PUSH_TO_DOCKERHUB=true
 
 # ---- REBUILDING FLAGS
 

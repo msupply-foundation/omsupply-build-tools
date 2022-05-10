@@ -34,7 +34,7 @@ fi
 if [ "$DATABASE_TYPE" = "sqlite" ]; then
     echo '--- AS SQLITE'
     if $REFRESH_DATA; then 
-        ./remote_server_sqlite_cli refresh-data | tee remote_server_postgres.log
+        ./demo_sqlite_cli refresh-dates | tee remote_server_postgres.log
         echo "done" > $DATA_WAS_REFRESHED_FILE
     fi
     ./remote_server_sqlite &>> remote_server_sqlite.log &
@@ -42,7 +42,7 @@ if [ "$DATABASE_TYPE" = "sqlite" ]; then
 else
     echo '--- AS POSTGRES'
     if $REFRESH_DATA; then 
-        ./remote_server_postgres_cli refresh-data | tee remote_server_postgres.lo
+        ./demo_postgres_cli refresh-dates | tee remote_server_postgres.lo
         echo "done" > $DATA_WAS_REFRESHED_FILE
     fi
   ./remote_server_postgres &>> remote_server_postgres.log &

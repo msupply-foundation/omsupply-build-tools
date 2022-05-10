@@ -42,13 +42,17 @@ RUN echo "REMOTE SERVER BUILD COMMIT: $(git rev-parse HEAD)" >> /home/build-info
 # --package server should build remote_server and remote_server_cli (bins as listed in src/sever/Cargo.toml)
 # Sqlite
 RUN cargo build --features default --release --package server
+RUN cargo build --features default --release --package demo
 RUN cp target/release/remote_server /home/remote_server_sqlite
 RUN cp target/release/remote_server_cli /home/remote_server_sqlite_cli
+RUN cp target/release/demo_cli /home/demo_sqlite_cli
 
 # Postgres
 RUN cargo build --features postgres --release --package server
+RUN cargo build --features postgres --release --package demo
 RUN cp target/release/remote_server /home/remote_server_postgres
 RUN cp target/release/remote_server_cli /home/remote_server_postgres_cli
+RUN cp target/release/demo_cli /home/demo_postgres_cli
 
 # --- BUILD openmsupply-client
 WORKDIR /home/
@@ -72,6 +76,8 @@ COPY --from=build /home/remote_server_sqlite .
 COPY --from=build /home/remote_server_sqlite_cli .
 COPY --from=build /home/remote_server_postgres .
 COPY --from=build /home/remote_server_postgres_cli .
+COPY --from=build /home/demo_postgres_cli .
+COPY --from=build /home/demo_sqlite_cli .
 COPY --from=build /home/remote-server/configuration /home/configuration
 
 ARG FORCE_REBUILD_CONFIGURATIONS='0'

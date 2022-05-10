@@ -62,7 +62,7 @@ These are empty images that need to be initilised, they can be found [here](http
 You would need to pass through sync site credentials via env variables
 
 ```bash
-docker run -ti -p 3000:3000 -e APP_SYNC__URL="http://host.docker.internal:2048" -e APP_SYNC__USERNAME="demo_site" -e  APP_SYNC__PASSWORD="pass" -e APP_SYNC__SITE_ID=2 msupplyfoundation/omsupply:latest
+docker run -ti -p 3000:3000 -e APP_SYNC__URL="http://host.docker.internal:2048" -e APP_SYNC__USERNAME="demo_site" -e  APP_SYNC__PASSWORD="d74ff0ee8da3b9806b18c877dbf29bbde50b5bd8e4dad7a3a725000feb82e8f1" -e APP_SYNC__SITE_ID=2 msupplyfoundation/omsupply:latest
 ```
 
 `NOTE` have to use `host.docker.internal` to access localhost from withing docker container, and if central server is not accessible (not running) on specified port, the operation may freeze (docker issue)
@@ -108,7 +108,7 @@ Creates base image, using postgres image as base.
 * `nginx` config is copied over, nginx serves static f/e files and proxies server to `/api` route
 * Build info is saved in `/home/build-info.txt` (branches and commits used in the build)
 * `entry.sh` runs first on container startup (it's meant to be harder to override then cmd.sh), it start postgres and nginx
-* `cmd.sh` would run after `entry.sh` and can be easily overwritten i.e. `docker run -ti image_name /bin/bash` to enter into container terminal without starting server, or `docker run -ti image_name ./remote_server_postgres_cli refresh-data` to run just the refresh data`, cmd.sh does the following:
+* `cmd.sh` would run after `entry.sh` and can be easily overwritten i.e. `docker run -ti image_name /bin/bash` to enter into container terminal without starting server, or `docker run -ti image_name ./demo_postgres_cli refresh-dates` to run just the refresh data`, cmd.sh does the following:
     * Starts either sqlite or postgres server (postgres by default, but can be overwritten with `-e DATABASE_TYPE=sqlite`)
     * Server is started with logs going to remote_server_{flavour}.log in `/home/` folder
     * Refreshes data if it's a fresh container (see `cmd.sh` for how to stop data refresh)
