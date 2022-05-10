@@ -7,7 +7,8 @@ BASE_IMAGE_TAG='latest'
 # To access localhost from within docker container use host.docker.internal
 SYNC_URL="http://host.docker.internal:2048"
 SYNC_SITE_NAME="demo"
-SYNC_SITE_PASSWORD="pass"
+# d74ff0ee8da3b9806b18c877dbf29bbde50b5bd8e4dad7a3a725000feb82e8f1 = "pass" (sha256)
+SYNC_SITE_PASSWORD_SHA256="d74ff0ee8da3b9806b18c877dbf29bbde50b5bd8e4dad7a3a725000feb82e8f1"
 SYNC_SITE_ID="2"
 USERS="central admin:pass,hospital director:pass,rural pharm:pass" 
 
@@ -29,7 +30,7 @@ docker build \
   --build-arg BASE_IMAGE_TAG="$BASE_IMAGE_TAG" \
   --build-arg SYNC_URL="$SYNC_URL" \
   --build-arg SYNC_SITE_NAME="$SYNC_SITE_NAME" \
-  --build-arg SYNC_SITE_PASSWORD="$SYNC_SITE_PASSWORD" \
+  --build-arg SYNC_SITE_PASSWORD_SHA256="$SYNC_SITE_PASSWORD_SHA256" \
   --build-arg SYNC_SITE_ID="$SYNC_SITE_ID" \
   --build-arg USERS="$USERS" \
   --build-arg FORCE_REBUILD_WITH_DATA="$FORCE_REBUILD_WITH_DATA" \
